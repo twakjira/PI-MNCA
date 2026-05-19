@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Physics-Informed Modern Neighborhood Component Attention for FRP-UHPC Bond Strength</title>
+<meta name="description" content="Physics-informed Modern Neighborhood Component Attention (PI-MNCA) for bond strength prediction of FRP bars in ultra-high-performance concrete (UHPC).">
+<meta name="author" content="Tadesse G. Wakjira">
+<meta name="keywords" content="UHPC, FRP, bond strength, Modern NCA, neighborhood component attention, physics-informed, conformal prediction, AI4RISE Lab">
+<link rel="canonical" href="https://twakjira.github.io/PI-MNCA/">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="PI-MNCA: Physics-Informed Modern Neighborhood Component Attention for FRP-UHPC Bond Strength">
+<meta property="og:description" content="Attention-based regressor over a 128-d learned embedding with physics-informed monotonicity and conformal calibration.">
+<meta property="og:url" content="https://twakjira.github.io/PI-MNCA/">
+<meta property="og:site_name" content="PI-MNCA">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v10">
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true },
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+<script defer src="app.js?v10"></script>
+</head>
+<body>
+
+<div class="section title-section fadein">
+  <h1 class="project-title">
+    <span class="accent">Physics-Informed Modern Neighborhood Component Attention</span> for Bond Strength Prediction of FRP Bars in Ultra-High-Performance Concrete
+  </h1>
+  <div class="authors">
+    <a href="https://ai4riselab.com" target="_blank" rel="noopener">Tadesse G. Wakjira</a>
+  </div>
+  <div class="buttons-row">
+    <a class="pill pill-paper pill-disabled" href="#" onclick="return false;"><svg class="pill-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Paper</a>
+    <a class="pill pill-predictor" href="#figures"><svg class="pill-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 4 14 12 14 11 22 20 10 12 10 13 2"/></svg>Predictor</a>
+    <a class="pill pill-method" href="#method"><svg class="pill-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>Method</a>
+    <a class="pill pill-code" href="https://github.com/twakjira/PI-MNCA" target="_blank" rel="noopener noreferrer"><svg class="pill-icon" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>Code</a>
+    <a class="pill pill-data" href="https://github.com/twakjira/PI-MNCA" target="_blank" rel="noopener noreferrer"><svg class="pill-icon" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>Data</a>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Abstract</h2>
+  <p class="abstract-text">
+    PI-MNCA is a physics-informed Modern Neighborhood Component Attention regressor for the ultimate pullout bond strength <em>&tau;<sub>u</sub></em> of fiber-reinforced polymer (FRP) bars embedded in ultra-high-performance concrete (UHPC). A 128-dimensional learned embedding feeds a soft kernel attention over a fixed memory bank of 380 training specimens. The target is ACI-style normalized as <em>y</em>&nbsp;=&nbsp;ln(<em>&tau;<sub>u</sub></em>/&radic;<em>f<sub>c</sub></em>), a soft monotonicity penalty enforces four mechanically known directions, and a split-conformal calibration delivers a distribution-free 90% prediction band. Every prediction is traceable to the specific training specimens that supported it.
+  </p>
+  <div class="metric-row">
+    <div class="metric-card primary"><div class="label">Test R<sup>2</sup></div><div class="value">0.914</div></div>
+    <div class="metric-card"><div class="label">Test RMSE</div><div class="value">2.95<span class="unit">MPa</span></div></div>
+    <div class="metric-card"><div class="label">Test MAE</div><div class="value">2.05<span class="unit">MPa</span></div></div>
+    <div class="metric-card accent-green"><div class="label">90% PI half-width</div><div class="value">±9.16<span class="unit">MPa</span></div></div>
+    <div class="metric-card"><div class="label">Ratio CV</div><div class="value">9.1%</div></div>
+    <div class="metric-card"><div class="label">Train / Test</div><div class="value">380 / 95</div></div>
+  </div>
+</div>
+
+<div class="section" id="method">
+  <h2>Method</h2>
+  <div class="module-list">
+    <p><strong>R1. Modern NCA soft kernel attention.</strong>
+      Predictions are a softmax-weighted average of training targets in a learned 128-d embedding, with similarity computed by Euclidean distance: $\hat y(x_q) = \sum_i \mathrm{softmax}_i(-\|f_\theta(x_q)-f_\theta(x_i)\|_2/T)\,\bar y_i$.</p>
+    <p><strong>R2. ACI-style target normalization.</strong>
+      Training targets are transformed to $y=\ln(\tau_u/\sqrt{f_c})$, which is invariant under the proportional scaling $f_c\to\alpha f_c,\ \tau_u\to\sqrt{\alpha}\,\tau_u$ that mirrors the ACI bond model.</p>
+    <p><strong>R3. Physics-informed monotonicity penalty.</strong>
+      A soft penalty suppresses local violations of four mechanically known directions: $f_c\uparrow$, $l/d\downarrow$, $\rho_{SF}\uparrow$, $c/d\uparrow$.</p>
+    <p><strong>R4. Dimension-symmetry augmentation.</strong>
+      Random sign/permutation of the embedding dimensions exploits the geometric invariances of the pullout problem and acts as a regularizer.</p>
+    <p><strong>R5. Split-conformal calibration.</strong>
+      The 90% prediction band is the empirical quantile of held-out residuals, giving valid marginal coverage without distributional assumptions.</p>
+    <p><strong>R6. Case-level interpretability.</strong>
+      Attention weights trace every prediction back to the specific training specimens that supported it, exposing the evidence behind each estimate.</p>
+  </div>
+</div>
+
+<div class="section wide" id="figures">
+  <div class="figure-grid">
+
+  <div class="figure-cell" id="predictor">
+  <div class="predictor-card predictor-card--mnca">
+    <div class="predictor-header">
+      <div class="predictor-header-icon predictor-header-icon--mnca" aria-hidden="true">
+        <svg viewBox="0 0 48 48">
+          <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="24" y1="24" x2="24" y2="6"/>
+            <line x1="24" y1="24" x2="40" y2="14"/>
+            <line x1="24" y1="24" x2="42" y2="32"/>
+            <line x1="24" y1="24" x2="34" y2="42"/>
+            <line x1="24" y1="24" x2="14" y2="42"/>
+            <line x1="24" y1="24" x2="6" y2="32"/>
+            <line x1="24" y1="24" x2="8" y2="14"/>
+          </g>
+          <g fill="currentColor">
+            <circle cx="24" cy="6"  r="2.6"/>
+            <circle cx="40" cy="14" r="2.6"/>
+            <circle cx="42" cy="32" r="2.6"/>
+            <circle cx="34" cy="42" r="2.6"/>
+            <circle cx="14" cy="42" r="2.6"/>
+            <circle cx="6"  cy="32" r="2.6"/>
+            <circle cx="8"  cy="14" r="2.6"/>
+          </g>
+          <circle cx="24" cy="24" r="5.5" fill="#fff" stroke="currentColor" stroke-width="2.4"/>
+        </svg>
+      </div>
+      <div class="predictor-header-text">
+        <div class="predictor-eyebrow predictor-eyebrow--mnca"><span class="live-pulse predictor-pulse--mnca" aria-hidden="true"></span>Attention over training memory bank</div>
+        <h2 class="predictor-title predictor-title--mnca">PI-MNCA Predictor</h2>
+      </div>
+    </div>
+
+    <div id="predictor-status" class="predictor-status">Loading model&hellip;</div>
+
+    <form id="predictor-form" class="predictor-form" autocomplete="off">
+      <div class="field">
+        <label class="field-label" for="d"><em>d</em> <span class="field-unit">(mm)</span></label>
+        <input class="field-input" id="d" type="number" step="0.5" min="8" max="20" value="12">
+        <span class="range-hint">8 &ndash; 20</span>
+      </div>
+      <div class="field">
+        <label class="field-label" for="fc"><em>f<sub>c</sub></em> <span class="field-unit">(MPa)</span></label>
+        <input class="field-input" id="fc" type="number" step="1" min="90" max="202" value="140">
+        <span class="range-hint">90 &ndash; 202</span>
+      </div>
+      <div class="field">
+        <label class="field-label" for="ld"><em>l/d</em></label>
+        <input class="field-input" id="ld" type="number" step="0.5" min="1" max="15" value="5">
+        <span class="range-hint">1 &ndash; 15</span>
+      </div>
+      <div class="field">
+        <label class="field-label" for="rho"><em>&rho;<sub>SF</sub></em> <span class="field-unit">(%)</span></label>
+        <input class="field-input" id="rho" type="number" step="0.1" min="0" max="3" value="2.0">
+        <span class="range-hint">0 &ndash; 3</span>
+      </div>
+      <div class="field">
+        <label class="field-label" for="cd"><em>c/d</em></label>
+        <input class="field-input" id="cd" type="number" step="0.1" min="0.67" max="9.4" value="4">
+        <span class="range-hint">0.67 &ndash; 9.4</span>
+      </div>
+      <div class="field">
+        <label class="field-label" for="frp">FRP type</label>
+        <select class="field-input" id="frp">
+          <option value="GFRP" selected>GFRP</option>
+          <option value="CFRP">CFRP</option>
+          <option value="BFRP">BFRP</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="surf">Surface</label>
+        <select class="field-input" id="surf">
+          <option value="Ribbed" selected>Ribbed</option>
+          <option value="Sand-coated">Sand-coated</option>
+          <option value="Smooth">Smooth</option>
+        </select>
+      </div>
+    </form>
+
+    <div class="predictor-actions">
+      <button id="btn-predict" class="btn btn-primary btn-predict" type="button" disabled>Predict</button>
+      <button id="btn-reset"   class="btn"                          type="button">Reset to defaults</button>
+    </div>
+
+    <div id="results" class="results-card hidden">
+      <div class="result-row">
+        <div class="result-label">Predicted <em>&tau;<sub>u</sub></em></div>
+        <div class="result-value"><span id="r-tau">&mdash;</span> <span class="unit">MPa</span></div>
+      </div>
+      <div class="result-row">
+        <div class="result-label">90% prediction interval</div>
+        <div class="result-value">[<span id="r-lo">&mdash;</span>, <span id="r-hi">&mdash;</span>] <span class="unit">MPa</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="subfig-label">(a)</div>
+  </div>
+
+  <div class="figure-cell" id="surface">
+  <div class="predictor-card predictor-card--mnca predictor-card--compact">
+    <div class="surface-head">
+      <h2 class="surface-title">2D parametric study</h2>
+      <div class="surface-controls">
+        <label>X
+          <select id="surface-x">
+            <option value="l_over_d" selected>l/d</option>
+            <option value="fc">fc (MPa)</option>
+            <option value="d">d (mm)</option>
+            <option value="rho_sf">&rho;_SF (%)</option>
+            <option value="c_over_d">c/d</option>
+          </select>
+        </label>
+        <label>Y
+          <select id="surface-y">
+            <option value="fc" selected>fc (MPa)</option>
+            <option value="d">d (mm)</option>
+            <option value="l_over_d">l/d</option>
+            <option value="rho_sf">&rho;_SF (%)</option>
+            <option value="c_over_d">c/d</option>
+          </select>
+        </label>
+        <button id="btn-surface" class="btn btn-primary" type="button" disabled>Generate</button>
+      </div>
+    </div>
+    <div id="surface-status" class="surface-status">Loading&hellip;</div>
+    <canvas id="surface-canvas" width="720" height="780"></canvas>
+    <div id="surface-legend" class="surface-legend"></div>
+  </div>
+  <div class="subfig-label">(b)</div>
+  </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h2>Citation</h2>
+<pre class="citation-block"><code>@article{wakjira2026pimnca,
+  title   = {Physics-Informed Modern Neighborhood Component Attention
+             for Bond Strength Prediction of FRP Bars in
+             Ultra-High-Performance Concrete},
+  author  = {Wakjira, Tadesse G.},
+  journal = {Under Review},
+  year    = {2026}
+}</code></pre>
+</div>
+
+<div class="section">
+  <h2>Authors</h2>
+  <p class="abstract-text">
+    <strong><a href="https://ai4riselab.com" target="_blank" rel="noopener">Tadesse G. Wakjira</a></strong>
+  </p>
+</div>
+
+<footer>
+  Developed by <a href="https://ai4riselab.com" target="_blank" rel="noopener">AI4RISE Lab</a>
+</footer>
+
+</body>
+</html>
